@@ -197,8 +197,9 @@ public class BorrowerDAO{
         
         String sql = "select * from borrower where email = '" + email + "' and password = '" + password + "'";
         System.out.println(sql);
-        Borrower  borrower = new Borrower();
-    
+        //Borrower  borrower = new Borrower();
+        //borrower = null;
+    /*
         try {
                 conn = dbc.getConnection();
                 System.out.println("Kết nối đến borrower");
@@ -226,10 +227,11 @@ public class BorrowerDAO{
             e.printStackTrace();
 	}finally{
             dbc.closeConnection(conn);
-        }	
+        }
+        System.out.println(borrower);
 	return borrower;
     }
-        /*
+        */
         borrowerList = this.getInfoAllBorrower();
         
         for ( Borrower borrower: borrowerList){
@@ -237,7 +239,10 @@ public class BorrowerDAO{
                 return borrower;
             }    
         }
-    */
+        
+        return null;
+    }
+    
     
     public void updateBorrower( Borrower borrower){
         String sql = "update borrower set "

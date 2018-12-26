@@ -33,6 +33,10 @@ public class UserUI extends javax.swing.JFrame {
     BookDAO bookDAO = new BookDAO();
     BorrowerDAO borrowerDAO = new BorrowerDAO();
     LoanDAO loanDAO = new LoanDAO();
+    
+    public UserUI(){
+        initComponents();
+    }
     public UserUI(Borrower  borrower) {
         
         initComponents();

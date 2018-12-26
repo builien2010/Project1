@@ -1,10 +1,12 @@
 package control;
 
+import static control.BorrowerDAO.conn;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.Borrower;
 
 import model.Staff;
 
@@ -200,19 +202,56 @@ public class StaffDAO{
     
     // đăng nhập
     
-    public boolean check(String email, String password){
+    public Staff check(String email, String password){
         
+        String sql = "select * from staff where email = '" + email + "' and password = '" + password + "'";
+        System.out.println(sql);
+        /*
+        Staff  staff = new Staff();
+        
+    
+        try {
+                conn = dbc.getConnection();
+                System.out.println("Kết nối đến staff");
+		System.out.println("lấy thông tin");
+		pstmt = conn.prepareStatement(sql);
+                System.out.println("pstmt");
+		ResultSet rs = pstmt.executeQuery();
+                System.out.println("rs");
+                
+                while(rs.next()){
+                    staff.setIdPerson(rs.getInt("idstaff"));
+                    staff.setName(rs.getString("name"));
+                    staff.setEmail(rs.getString("email"));
+                    staff.setPassword(rs.getString("password"));
+                    staff.setAddress(rs.getString("address"));
+                    staff.setPhone(rs.getInt("phone"));
+                    staff.setSalary(rs.getDouble("salary"));
+                  
+                }		
+		
+                        
+                pstmt.close();		
+	} catch (SQLException e) {		
+            System.out.println("Error: Lỗi kết bối với bảng staff" );
+            e.printStackTrace();
+	}finally{
+            dbc.closeConnection(conn);
+        }	
+	return staff;
+
+*/
         staffList = this.getInfoAllStaff();
         
         for ( Staff staff: staffList){
             if(staff.getEmail().equals(email) && staff.getPassword().equals(password)){
-                return true;
+                return staff;
             }    
         }
         
-        return false;
-         
+        return null;
     }
+}
     
     
     
@@ -222,4 +261,4 @@ public class StaffDAO{
                 
 			
 	
-}
+
