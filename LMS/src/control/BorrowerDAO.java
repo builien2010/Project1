@@ -39,7 +39,7 @@ public class BorrowerDAO{
                     borrower.setName(rs.getString("name"));
                     borrower.setEmail(rs.getString("email"));
                     borrower.setPassword(rs.getString("password"));
-                    borrower.setAddress(rs.getString("adress"));
+                    borrower.setAddress(rs.getString("address"));
                     borrower.setPhone(rs.getInt("phone"));
                     
                     borrowerList.add(borrower);
@@ -89,7 +89,7 @@ public class BorrowerDAO{
                 borrower.setName(rs.getString("name"));
                 borrower.setEmail(rs.getString("email"));
                 borrower.setPassword(rs.getString("password"));
-                borrower.setAddress(rs.getString("adress"));
+                borrower.setAddress(rs.getString("address"));
                 borrower.setPhone(rs.getInt("phone"));
                     
                 borrowerList.add(borrower);
@@ -110,9 +110,28 @@ public class BorrowerDAO{
         return borrowerList;
     }
         
-    public void insertBook(Borrower borrower){
+    public int insertBorrower(Borrower borrower){
         
         String sql = "insert into borrower(idborrower,name,email,password,address,phone) values(?,?,?,?,?,?)";
+        String sql2 = "select idborrower from borrower";
+        
+        try{
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            pstmt = conn.prepareStatement(sql2);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                if ( rs.getInt("idborrower") == borrower.getIdPerson()){
+                    System.out.println("đã có id trong csdl");
+                    return -1;
+                }
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            return 0;
+              
+        }
         
         try{
             conn = dbc.getConnection();
@@ -137,13 +156,15 @@ public class BorrowerDAO{
                  
         }catch(SQLException e){
             e.printStackTrace();
+            return 0;
         }finally{
             dbc.closeConnection(conn);
         }
+        return 1;
         
     }
     
-    public boolean deleteBook(int id){
+    public boolean deleteBorrower(int id){
         
         String sql = "delete from borrower where idborrower = ?";
         
@@ -169,10 +190,95 @@ public class BorrowerDAO{
             
     }
     
+    
+    // đăng nhập
+    
+    public Borrower check(String email, String password){
+        
+        String sql = "select * from borrower where email = '" + email + "' and password = '" + password + "'";
+        System.out.println(sql);
+        Borrower  borrower = new Borrower();
+    
+        try {
+                conn = dbc.getConnection();
+                System.out.println("Kết nối đến borrower");
+		System.out.println("lấy thông tin");
+		pstmt = conn.prepareStatement(sql);
+                System.out.println("pstmt");
+		ResultSet rs = pstmt.executeQuery();
+                System.out.println("rs");
+                
+                while(rs.next()){
+                System.out.println(rs.getInt("idborrower"));
+                    borrower.setIdPerson(rs.getInt("idborrower"));
+                    borrower.setName(rs.getString("name"));
+                    borrower.setEmail(rs.getString("email"));
+                    borrower.setPassword(rs.getString("password"));
+                    borrower.setAddress(rs.getString("address"));
+                    borrower.setPhone(rs.getInt("phone"));
+                  
+                }		
+		
+                        
+                pstmt.close();		
+	} catch (SQLException e) {		
+            System.out.println("Error: Lỗi kết bối với bảng borrower" );
+            e.printStackTrace();
+	}finally{
+            dbc.closeConnection(conn);
+        }	
+	return borrower;
+    }
+        /*
+        borrowerList = this.getInfoAllBorrower();
+        
+        for ( Borrower borrower: borrowerList){
+            if(borrower.getEmail().equals(email) && borrower.getPassword().equals(password)){
+                return borrower;
+            }    
+        }
+    */
+    
+    public void updateBorrower( Borrower borrower){
+        String sql = "update borrower set "
+                + "name = " + "'" + borrower.getName() + "',"
+                + "email = " + "'" + borrower.getEmail() + "',"
+                + "password = " + "'" + borrower.getPassword()+ "',"
+                + "address = " + "'" + borrower.getAddress()+ "',"
+                + "phone = " + "'" + borrower.getPhone() + "'"
+                + " where idborrower = " + borrower.getIdPerson();
+        System.out.println(sql);
+        
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Cap nhat loi");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+
+        
+    }
+         
+}
+
+   
+    
+
+
+
+    
+    
+    
 	
 
         
                 
 			
 	
-}

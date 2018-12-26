@@ -1,0 +1,19 @@
+﻿1. Admin
+-  Quản lí sách 
++ Thêm
++ Hiển thị tất cả sách
++ Tìm kiếm sách
++ Xóa sách
+- Quản lí mượn sách:
++ Hiển thị tất cả phiếu mượn sách
+- Quản lí bạn đọc
++ Thêm bạn đọc
++ Tìm kiếm bạn đọc
++ Hiển thị tất cả bạn đọc
+2. User
+- Quản lí thông tin cá nhân
+- Tìm kiếm sách
+- Hiển thị tất cả các sách
+3. Đăng nhập
+- Admin
+- User

@@ -4,8 +4,8 @@ package model;
 
 public class Person {
 	
-	protected int idPerson;
-	protected String name;
+    protected int idPerson;
+    protected String name;
 	protected String password;
         protected String email;
 	protected String address;

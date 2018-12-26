@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Loan {
     
-	private int loanId;
+	private int idLoan;
         
 	private Borrower borrower;
 	private Book book;
@@ -19,10 +19,14 @@ public class Loan {
 	private Staff receiver;
 	private Date returnedDate;
 	
-	private boolean finePaid;
+	private double finePaid;
+        
+        public Loan(){
+            
+        }
 
 	public Loan(Borrower borrower, Book book, Staff issuer, Date issuedDate, Staff receiver, Date returnedDate,
-			boolean finePaid) {
+			double finePaid) {
 		super();
 		this.borrower = borrower;
 		this.book = book;
@@ -33,12 +37,12 @@ public class Loan {
 		this.finePaid = finePaid;
 	}
         
-        public int getLoanId(){
-            return loanId;
+        public int getIdLoan(){
+            return idLoan;
         }
         
-    public void setLoanId(int loanId){
-            this.loanId = loanId;
+    public void setIdLoan(int idLoan){
+            this.idLoan = idLoan;
             
         }
 
@@ -90,18 +94,18 @@ public class Loan {
 		this.returnedDate = returnedDate;
 	}
 
-	public boolean isFinePaid() {
+	public double getFinePaid() {
 		return finePaid;
 	}
 
-	public void setFinePaid(boolean finePaid) {
+	public void setFinePaid(double finePaid) {
 		this.finePaid = finePaid;
 	}
 	
 	// compute fine for a particular loan only
 	// chỉ tính tiền cho các khoản vay cụ thể
 	// chỉ tính tiền cho 1 phiếu mượn
-	
+	/*
 	public double computeFine1() {
 		double totalFine = 0;
 		
@@ -156,6 +160,6 @@ public class Loan {
 		System.out.println("Cuốn sách " + book.getTitle() + " đã được gia hạn thành công");	
 		
 	}
-	
+	*/
 }
 	
