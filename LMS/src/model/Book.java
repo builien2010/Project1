@@ -26,8 +26,8 @@ public class Book {
 		
 	}
 	
-	public Book(int idbook, String title, String subject, String author,int quantitySum, int quantityBorrowed, String state) {
-            this.idbook = idbook;
+	public Book(String title, String subject, String author,int quantitySum, int quantityBorrowed, String state) {
+           
             this.title = title;
             this.subject = subject;
             this.author = author;

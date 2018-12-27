@@ -6,7 +6,7 @@ public class Staff extends Person{
 	
 	protected double salary;
 
-	public Staff(int id, String name, String address, int phone, double salary) {
+	public Staff( String name, String address, int phone, double salary) {
 		//super(id, name, address, phone);
 		this.salary = salary;	
 	}

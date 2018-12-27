@@ -17,4 +17,3 @@
 3. Đăng nhập
 - Admin
 - User
-4. Bạn đọc đăng kí tài khoản mới

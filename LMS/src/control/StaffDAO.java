@@ -251,6 +251,37 @@ public class StaffDAO{
         
         return null;
     }
+    
+    public int countStaff(){
+        String sql = "select count(*) from borrower";
+        
+        int count = 0;
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                count = Integer.parseInt(rs.getString(1));
+}
+            System.out.println("Tổng số lượng nhân viên là: " + count);
+            
+            //count = rs.getInt("count(*)");
+            
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Tính tổng số lượng sách lỗi");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+        
+        return count;
+
+        
+    }
 }
     
     

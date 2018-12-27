@@ -119,19 +119,19 @@ public class BookDAO{
         
     public void insertBook(Book book){
         
-        String sql = "insert into book(idbook,title,subject,author,quantitySum,quantityBorrowed,status) values(?,?,?,?,?,?,?)";
+        String sql = "insert into book(title,subject,author,quantitySum,quantityBorrowed,status) values(?,?,?,?,?,?)";
         
         try{
             conn = dbc.getConnection();
              System.out.println("Kết nối đến BookDAO");
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, book.getIdbook());
-            pstmt.setString( 2, book.getTitle());
-            pstmt.setString( 3, book.getSubject());
-            pstmt.setString( 4, book.getAuthor());
-            pstmt.setInt( 5, book.getQuantitySum());
-            pstmt.setInt(6, book.getQuantityBorrowed());
-            pstmt.setString(7, book.getStatus());
+           
+            pstmt.setString( 1, book.getTitle());
+            pstmt.setString( 2, book.getSubject());
+            pstmt.setString( 3, book.getAuthor());
+            pstmt.setInt( 4, book.getQuantitySum());
+            pstmt.setInt(5, book.getQuantityBorrowed());
+            pstmt.setString(6, book.getStatus());
             
             int check =  pstmt.executeUpdate();
             
@@ -177,6 +177,108 @@ public class BookDAO{
             
     }
     
+    public int sumBookBorrowed(){
+        String sql = "select sum(quantityBorrowed) from book";
+        
+        int sum = 0;
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                //sum = Integer.parseInt(rs.getString(1));
+                //sum = rs.getInt("sum1");
+                int c = rs.getInt(1);
+                sum = sum + c;
+            }
+            System.out.println("Tổng số lượng sách mượn là: " + sum);
+            
+            //count = rs.getInt("count(*)");
+            
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Tính tổng số lượng sách mượn lỗi");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+        
+        return sum;
+
+        
+    }
+    
+    public int sumBook(){
+        String sql = "select sum(quantitySum) as sum2 from book";     
+        int sum = 0;
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                //sum = Integer.parseInt(rs.getString(1));
+                //sum = rs.getInt("sum2");
+                int c = rs.getInt(1);
+                sum = sum + c;
+            }
+            System.out.println("Tổng số lượng sách là: " + sum);
+            
+            //count = rs.getInt("count(*)");
+            
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Tính tổng số lượng sách lỗi");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+        
+        return sum;
+
+      
+    }
+    
+    public double sumFinePaid(){    
+        String sql = "select sum(finepaid) from loan";
+        
+        double sum = 0;
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến loan");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                //sum = Integer.parseInt(rs.getString(1));
+                //sum = rs.getInt("sum2");
+                double c = rs.getDouble(1);
+                sum = sum + c;
+            }
+            System.out.println("Tổng số tiền phạt là: " + sum);
+            
+            //count = rs.getInt("count(*)");
+            
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Tính tổng số tiền phạt");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+        
+        return sum;
+
+      
+    }
+    
+  
 	
 
         

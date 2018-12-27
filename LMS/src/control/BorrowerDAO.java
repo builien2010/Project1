@@ -271,6 +271,37 @@ public class BorrowerDAO{
 
         
     }
+    
+    public int countBorrower(){
+        String sql = "select count(*) from borrower";
+        
+        int count = 0;
+        try {
+            conn = dbc.getConnection();
+            System.out.println("Kết nối đến borrower");
+            System.out.println("lấy thông tin");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                count = Integer.parseInt(rs.getString(1));
+}
+            System.out.println("Số lượng bạn đọc là: " + count);
+            
+            //count = rs.getInt("count(*)");
+            
+            pstmt.close();
+            
+        }catch(Exception e){
+            System.out.println("Cap nhat loi");
+            e.printStackTrace();
+        }finally{
+            dbc.closeConnection(conn);
+        } 
+        
+        return count;
+
+        
+    }
          
 }
 
