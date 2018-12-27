@@ -3,20 +3,20 @@
 Quản lí thư viện (LMS)
 
 1. Admin
--  Quản lí sách 
+1.1  Quản lí sách 
 + Thêm
 + Hiển thị tất cả sách
 + Tìm kiếm sách
 + Xóa sách
-- Quản lí mượn sách:
+1.2 Quản lí mượn sách:
 + Hiển thị tất cả phiếu mượn sách
-- Quản lí bạn đọc
+1.3 Quản lí bạn đọc
 + Thêm bạn đọc
 + Tìm kiếm bạn đọc
 + Hiển thị tất cả bạn đọc
-- Quản lí mượn sách: 
+1.4 Quản lí mượn sách: 
 + Hiển thị tất cả các phiếu mượn sách
-- Thống kê
+1.5 Thống kê
 + Có tất cả bao nhiêu bạn đọc
 + Có tất cả bao nhiêu sách
 + Có tất cả bao nhiêu sách đã mượn
