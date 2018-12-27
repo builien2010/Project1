@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Loan;
-
+import model.Staff;
 /**
  *
  * @author lienb
@@ -34,11 +34,14 @@ public class Admin extends javax.swing.JFrame {
     DefaultTableModel modelBook;
     DefaultTableModel modelBorrower;
     DefaultTableModel modelLoan;
+    DefaultTableModel modelStaff;
     private ArrayList<Book> bookList;
     private ArrayList<Borrower> borrowerList;
+    private ArrayList<Staff> staffList;
     private ArrayList<Loan> loanList;
     BookDAO bookDAO = new BookDAO();
     BorrowerDAO borrowerDAO = new BorrowerDAO();
+    StaffDAO staffDAO = new StaffDAO();
     LoanDAO loanDAO = new LoanDAO();
     private int x = 10;
     //bookList = bookDAO.getInfoAllBook();
@@ -49,12 +52,9 @@ public class Admin extends javax.swing.JFrame {
         bookList = null;
         modelBook = (DefaultTableModel)bookTable.getModel();
         modelBorrower = (DefaultTableModel)borrowerTable.getModel();
+        modelStaff = (DefaultTableModel)staffTable.getModel();
         modelLoan = (DefaultTableModel) loanTable.getModel();
-        txtCountBorrower.setText(String.valueOf((new BorrowerDAO()).countBorrower()));
-        txtCountStaff.setText(String.valueOf((new StaffDAO()).countStaff()));
-        txtSumBook.setText(String.valueOf((new BookDAO()).sumBook()));
-        txtBookBorrowed.setText(String.valueOf((new BookDAO()).sumBookBorrowed()));
-        txtFinePaid.setText(String.valueOf((new BookDAO()).sumFinePaid()));
+        
         
         
     }
@@ -104,7 +104,6 @@ public class Admin extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txtSearchBorrower = new javax.swing.JTextField();
         buttonSearchBorrower = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         borrowerTable = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
@@ -126,11 +125,29 @@ public class Admin extends javax.swing.JFrame {
         buttonShowBrrower = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtSearchStaff = new javax.swing.JTextField();
+        buttonSearchStaff = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        staffTable = new javax.swing.JTable();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtNameStaff = new javax.swing.JTextField();
+        txtEmailStaff = new javax.swing.JTextField();
+        txtPasswordStaff = new javax.swing.JTextField();
+        txtAddressStaff = new javax.swing.JTextField();
+        txtPhoneStaff = new javax.swing.JTextField();
+        txtSalaryStaff = new javax.swing.JTextField();
+        buttonAddStaff = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        txtIdDeleteStaff = new javax.swing.JTextField();
+        buttonDeleteStaff = new javax.swing.JButton();
+        jLabel36 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
         txtSumBook = new javax.swing.JTextField();
@@ -143,6 +160,7 @@ public class Admin extends javax.swing.JFrame {
         txtCountStaff = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
+        buttonSatistic = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lí thư viện");
@@ -167,6 +185,11 @@ public class Admin extends javax.swing.JFrame {
         });
 
         jButton2.setText("Quay lại");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tên sách");
 
@@ -379,7 +402,7 @@ public class Admin extends javax.swing.JFrame {
                     .addComponent(buttonShowLoan))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addContainerGap(356, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Quản lí mượn sách", jPanel5);
@@ -392,8 +415,6 @@ public class Admin extends javax.swing.JFrame {
                 buttonSearchBorrowerActionPerformed(evt);
             }
         });
-
-        jButton3.setText("Quay lại");
 
         borrowerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -436,6 +457,11 @@ public class Admin extends javax.swing.JFrame {
         jLabel21.setText("Nhập id muốn xóa");
 
         buttonIdDeleteBrrower.setText("Xóa");
+        buttonIdDeleteBrrower.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonIdDeleteBrrowerActionPerformed(evt);
+            }
+        });
 
         jLabel22.setText("Hiển thị tất cả thông tin bạn đọc");
 
@@ -458,9 +484,7 @@ public class Admin extends javax.swing.JFrame {
                         .addGap(52, 52, 52)
                         .addComponent(txtSearchBorrower, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(buttonSearchBorrower)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
+                        .addComponent(buttonSearchBorrower))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -515,9 +539,8 @@ public class Admin extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(txtSearchBorrower, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonSearchBorrower)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                    .addComponent(buttonSearchBorrower))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
                 .addComponent(jLabel20)
@@ -562,42 +585,121 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel10.setText("Tìm kiếm");
 
-        jButton4.setText("Tìm");
+        buttonSearchStaff.setText("Tìm");
+        buttonSearchStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSearchStaffActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Quay lại");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        staffTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Tên nhân viên", "Địa chỉ", "Email", "Mật khẩu", "Số điện thoại"
+                "Mã nhân viên", "Tên nhân viên", "Email", "Mật khẩu", "Địa chỉ", "Số điện thoại", "Tiền lương"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(staffTable);
+
+        jLabel14.setText("Tên nhân viên");
+
+        jLabel29.setText("Email");
+
+        jLabel30.setText("Mật khẩu");
+
+        jLabel31.setText("Địa chỉ");
+
+        jLabel32.setText("Số điện thoại");
+
+        jLabel33.setText("Tiền lương");
+
+        buttonAddStaff.setText("Thêm nhân viên");
+        buttonAddStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddStaffActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setText("Xóa nhân viên theo mã nhân viên");
+
+        jLabel35.setText("Nhập id: ");
+
+        buttonDeleteStaff.setText("Xóa");
+        buttonDeleteStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeleteStaffActionPerformed(evt);
+            }
+        });
+
+        jLabel36.setText("Hiển thị tất cả các nhân viên");
+
+        jButton3.setText("Hiển thị");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(jLabel10)
-                        .addGap(81, 81, 81)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)
-                        .addGap(27, 27, 27)
-                        .addComponent(jButton5))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(159, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel35)
+                        .addGap(33, 33, 33)
+                        .addComponent(txtIdDeleteStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(buttonDeleteStaff))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(102, 102, 102)
+                            .addComponent(jLabel10)
+                            .addGap(81, 81, 81)
+                            .addComponent(txtSearchStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(buttonSearchStaff))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(31, 31, 31)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(68, 68, 68)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel14)
+                                        .addComponent(jLabel29)
+                                        .addComponent(jLabel31)
+                                        .addComponent(jLabel32)
+                                        .addComponent(jLabel33))
+                                    .addGap(30, 30, 30)
+                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtPasswordStaff)
+                                        .addComponent(txtNameStaff)
+                                        .addComponent(txtEmailStaff)
+                                        .addComponent(txtAddressStaff)
+                                        .addComponent(txtPhoneStaff)
+                                        .addComponent(txtSalaryStaff, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
+                                .addComponent(jLabel30))
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                    .addGap(101, 101, 101)
+                                    .addComponent(jLabel36)
+                                    .addGap(33, 33, 33)
+                                    .addComponent(jButton3))
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                    .addGap(82, 82, 82)
+                                    .addComponent(jLabel34))))
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGap(247, 247, 247)
+                            .addComponent(buttonAddStaff))))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -605,12 +707,50 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(txtSearchStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonSearchStaff))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(txtNameStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
+                .addGap(1, 1, 1)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel35)
+                    .addComponent(txtIdDeleteStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonDeleteStaff))
+                .addGap(2, 2, 2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel29)
+                    .addComponent(txtEmailStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel30)
+                            .addComponent(txtPasswordStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel36)
+                            .addComponent(jButton3))))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel31)
+                    .addComponent(txtAddressStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel32)
+                    .addComponent(txtPhoneStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel33)
+                    .addComponent(txtSalaryStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(buttonAddStaff)
+                .addGap(50, 50, 50))
         );
 
         jTabbedPane1.addTab("Quản lí nhân viên", jPanel4);
@@ -633,34 +773,48 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel28.setText("(Tổng số tiền phạt)");
 
+        buttonSatistic.setText("Thống kê");
+        buttonSatistic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSatisticActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel25)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel24)
-                        .addComponent(jLabel26)
-                        .addComponent(jLabel27)
-                        .addComponent(jLabel11)
-                        .addComponent(jLabel28)))
-                .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCountStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtSumBook, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                        .addComponent(txtBookBorrowed)
-                        .addComponent(txtFinePaid))
-                    .addComponent(txtCountBorrower, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(526, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel25)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel24)
+                                .addComponent(jLabel26)
+                                .addComponent(jLabel27)
+                                .addComponent(jLabel11)
+                                .addComponent(jLabel28)))
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCountStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtSumBook, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                .addComponent(txtBookBorrowed)
+                                .addComponent(txtFinePaid))
+                            .addComponent(txtCountBorrower, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(320, 320, 320)
+                        .addComponent(buttonSatistic)))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(19, 19, 19)
+                .addComponent(buttonSatistic)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
                     .addComponent(txtSumBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -682,7 +836,7 @@ public class Admin extends javax.swing.JFrame {
                     .addComponent(txtFinePaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel28)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Thống kê", jPanel2);
@@ -874,6 +1028,99 @@ public class Admin extends javax.swing.JFrame {
         showBook(bookList);
         bookList.clear();
     }//GEN-LAST:event_buttonSearchBookActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void buttonIdDeleteBrrowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIdDeleteBrrowerActionPerformed
+
+        // xóa tài khoản bạn đọc theo id
+        int id = Integer.parseInt(txtIdDeleteBorrower.getText());
+        if(borrowerDAO.deleteBorrower(id)){
+            JOptionPane.showConfirmDialog(null, "Xóa tài khoản bạn đọc thành công!", "Xóa bạn đọc", JOptionPane.DEFAULT_OPTION);
+            System.out.println("Xóa thành công!");
+        }else{
+            JOptionPane.showConfirmDialog(null, "Xóa tài khoản bạn đọc thất bại", "Xóa bạn đọc", JOptionPane.DEFAULT_OPTION);
+            System.out.println("Xóa thất bại!");
+        }
+        
+        
+    }//GEN-LAST:event_buttonIdDeleteBrrowerActionPerformed
+
+    private void buttonSearchStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchStaffActionPerformed
+
+        // tìm kiếm nhân viên 
+        String keyWordStaff = txtSearchStaff.getText();
+        System.out.println(keyWordStaff);
+        staffList = staffDAO.searchStaffsByKeyword(keyWordStaff);
+        showStaff(staffList);
+        staffList.clear();
+        
+        
+    }//GEN-LAST:event_buttonSearchStaffActionPerformed
+
+    private void buttonAddStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddStaffActionPerformed
+        // TODO add your handling code here:
+        //Thêm nhân viên
+        Staff staff = new Staff();
+        
+       
+        staff.setName(txtNameStaff.getText());
+        staff.setEmail(txtEmailStaff.getText());
+        staff.setPassword(txtPasswordStaff.getText());
+        staff.setAddress(txtAddressStaff.getText());
+        staff.setPhone(txtPhoneStaff.getText());
+        staff.setSalary(Double.parseDouble(txtSalaryStaff.getText()));
+
+        int k = staffDAO.insertStaff(staff);
+        if( k == 1){
+
+            // Thông báo đã thêm thành công hay thất bại
+            //JOptionPane.showMessageDialog(JFame,"Thêm Sách");
+
+            JOptionPane.showConfirmDialog(null, "Thêm thành công","Thêm bạn đọc",JOptionPane.DEFAULT_OPTION);
+        }else{
+            JOptionPane.showConfirmDialog(null, "Không được để trống", "Thêm bạn đọc", JOptionPane.DEFAULT_OPTION);
+        }
+        
+        
+    }//GEN-LAST:event_buttonAddStaffActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        // Hiển thị tất cả các nhân viên
+        staffList = staffDAO.getInfoAllStaff();
+        showStaff(staffList);
+        staffList.clear();
+
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void buttonDeleteStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteStaffActionPerformed
+        // TODO add your handling code here:
+        // Xóa nhân viên theo mã số id
+        // xóa tài khoản bạn đọc theo id
+        int id = Integer.parseInt(txtIdDeleteStaff.getText());
+        if(staffDAO.deleteStaff(id)){
+            JOptionPane.showConfirmDialog(null, "Xóa tài khoản nhân viên thành công!", "Xóa nhân viên", JOptionPane.DEFAULT_OPTION);
+            System.out.println("Xóa thành công!");
+        }else{
+            JOptionPane.showConfirmDialog(null, "Xóa tài khoản nhân viên thất bại", "Xóa nhân viên", JOptionPane.DEFAULT_OPTION);
+            System.out.println("Xóa thất bại!");
+        }
+        
+    }//GEN-LAST:event_buttonDeleteStaffActionPerformed
+
+    private void buttonSatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSatisticActionPerformed
+        // TODO add your handling code here:
+        // Thống kê
+        txtCountBorrower.setText(String.valueOf((new BorrowerDAO()).countBorrower()));
+        txtCountStaff.setText(String.valueOf((new StaffDAO()).countStaff()));
+        txtSumBook.setText(String.valueOf((new BookDAO()).sumBook()));
+        txtBookBorrowed.setText(String.valueOf((new BookDAO()).sumBookBorrowed()));
+        txtFinePaid.setText(String.valueOf((new BookDAO()).sumFinePaid()));
+    }//GEN-LAST:event_buttonSatisticActionPerformed
     
     public void clearBookTable(){
         System.out.println("clear book table được gọi");
@@ -926,6 +1173,18 @@ public class Admin extends javax.swing.JFrame {
                 borrower.getIdPerson(), borrower.getName(), borrower.getEmail(), borrower.getPassword(), borrower.getAddress(), borrower.getPhone()
             });
         }
+    }
+    
+    public void showStaff(ArrayList<Staff> staffList){
+        modelStaff.setRowCount(0);
+        
+        for( Staff staff: staffList){
+            modelStaff.addRow(new Object[]{
+                staff.getIdPerson(),staff.getName(),staff.getEmail(),staff.getPassword(),staff.getAddress(),staff.getPhone(),staff.getSalary()
+            });
+        }
+        
+        
     }
         
     /**
@@ -996,23 +1255,26 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JTable bookTable;
     private javax.swing.JTable borrowerTable;
     private javax.swing.JButton buttonAddBrrower;
+    private javax.swing.JButton buttonAddStaff;
     private javax.swing.JButton buttonAllBook;
     private javax.swing.JButton buttonDeleteBook;
+    private javax.swing.JButton buttonDeleteStaff;
     private javax.swing.JButton buttonIdDeleteBrrower;
     private javax.swing.JButton buttonInsertBook;
+    private javax.swing.JButton buttonSatistic;
     private javax.swing.JButton buttonSearchBook;
     private javax.swing.JButton buttonSearchBorrower;
+    private javax.swing.JButton buttonSearchStaff;
     private javax.swing.JButton buttonShowBrrower;
     private javax.swing.JButton buttonShowLoan;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1028,7 +1290,15 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1045,24 +1315,31 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTable loanTable;
     private javax.swing.JTextField searchTf;
+    private javax.swing.JTable staffTable;
     private javax.swing.JTextField txtAddressBorrower;
+    private javax.swing.JTextField txtAddressStaff;
     private javax.swing.JTextField txtAuthor;
     private javax.swing.JTextField txtBookBorrowed;
     private javax.swing.JTextField txtCountBorrower;
     private javax.swing.JTextField txtCountStaff;
     private javax.swing.JTextField txtDeleteId;
     private javax.swing.JTextField txtEmailBorrower;
+    private javax.swing.JTextField txtEmailStaff;
     private javax.swing.JTextField txtFinePaid;
     private javax.swing.JTextField txtIdDeleteBorrower;
+    private javax.swing.JTextField txtIdDeleteStaff;
     private javax.swing.JTextField txtNameBorrower;
+    private javax.swing.JTextField txtNameStaff;
     private javax.swing.JTextField txtPasswordBorrower;
+    private javax.swing.JTextField txtPasswordStaff;
     private javax.swing.JTextField txtPhoneBorrower;
+    private javax.swing.JTextField txtPhoneStaff;
     private javax.swing.JTextField txtQuantity;
+    private javax.swing.JTextField txtSalaryStaff;
     private javax.swing.JTextField txtSearchBorrower;
+    private javax.swing.JTextField txtSearchStaff;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtSubject;
     private javax.swing.JTextField txtSumBook;

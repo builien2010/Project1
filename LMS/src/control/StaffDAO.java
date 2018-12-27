@@ -86,13 +86,13 @@ public class StaffDAO{
             
         try{
             conn = dbc.getConnection();
-            System.out.println("Kết nối đến borrower");
+            System.out.println("Kết nối đến staff");
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 Staff  staff = new Staff();
                     
-                staff.setIdPerson(rs.getInt("idborrower"));
+                staff.setIdPerson(rs.getInt("idstaff"));
                 staff.setName(rs.getString("name"));
                 staff.setEmail(rs.getString("email"));
                 staff.setPassword(rs.getString("password"));
@@ -121,26 +121,7 @@ public class StaffDAO{
     public int insertStaff(Staff staff){
         
         String sql = "insert into staff(idstaff,name,email,password,address,phone,salary) values(?,?,?,?,?,?,?)";
-        String sql2 = "select idstaff from staff";
-        
-        try{
-            conn = dbc.getConnection();
-            System.out.println("Kết nối đến staff");
-            pstmt = conn.prepareStatement(sql2);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
-                if ( rs.getInt("idstaff") == staff.getIdPerson()){
-                    System.out.println("đã có id trong csdl");
-                    return -1;
-                }
-            }
-            
-        }catch(Exception e){
-            e.printStackTrace();
-            return 0;
-              
-        }
-        
+         
         try{
             conn = dbc.getConnection();
             System.out.println("Kết nối đến staff");
@@ -156,7 +137,7 @@ public class StaffDAO{
             int check =  pstmt.executeUpdate();
             
             if ( check != 0){
-                System.out.println("Thêm borrower vào CSDL thành công");    
+                System.out.println("Thêm staff vào CSDL thành công");    
             }else{
                 System.out.println("Thêm thất bại");
             }
