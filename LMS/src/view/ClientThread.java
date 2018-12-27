@@ -35,6 +35,24 @@ public class ClientThread extends Thread{
 		return name;
 	}
         
+        public void sendBook(Book book) throws IOException{
+            sendMSG(String.valueOf(book.getIdbook()));
+            sendMSG(book.getTitle());
+            sendMSG(book.getSubject());
+            sendMSG(book.getAuthor());
+            sendMSG(String.valueOf(book.getQuantitySum()));
+            sendMSG(String.valueOf(book.getQuantityBorrowed()));
+            sendMSG(book.getStatus());
+            
+	}
+	/*
+	public void sendUser(User user) throws IOException{
+		sendMSG(user.getName());
+		sendMSG(user.getPhone());
+		sendMSG(user.getAddress());
+	}
+*/
+	 
 	public void run(){
             
             String request = null;
@@ -134,6 +152,42 @@ public class ClientThread extends Thread{
                             }
                         }
                     }
+                }
+            }
+            
+            if ( respone.equals("admin")){
+                while(active){
+                    
+                    try{
+                        request = getMSG();   
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    
+                    ArrayList<Borrower> borrowerList = new ArrayList<>();
+                    ArrayList<Book> bookList = new ArrayList<>();
+                    
+                    if(request.equals("showBook")){
+                        try {
+                            bookList = (new BookDAO()).getInfoAllBook();
+                            
+                            for ( Book book : bookList){
+                                try {
+                                    sendMSG("book");
+                                    sendBook(book);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                
+                            }
+                                    
+                            sendMSG("done");
+                        } catch (IOException ex) {
+                            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    
+                    
                 }
             }
 		

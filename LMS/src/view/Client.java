@@ -6,6 +6,7 @@
 package view;
 
 import control.BorrowerDAO;
+import control.StaffDAO;
 import java.awt.HeadlessException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Borrower;
+import model.Staff;
 
 /**
  *
@@ -186,9 +188,12 @@ public class Client extends javax.swing.JFrame {
 		}
 				
                 if(check.equals("admin")){
+                    
+                    Staff staff = new Staff();
+                    staff = (new StaffDAO()).check(email, password);
                     JOptionPane.showMessageDialog(null, "Admin đăng nhập");
 			this.setVisible(false);
-			new Admin().setVisible(true);
+			new Admin(this).setVisible(true);
 		}
 			
 	

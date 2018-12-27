@@ -11,7 +11,11 @@ import model.Borrower;
 import control.BookDAO;
 import control.BorrowerDAO;
 import control.LoanDAO;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Loan;
 
@@ -24,6 +28,8 @@ public class Admin extends javax.swing.JFrame {
     /**
      * Creates new form Admin
      */
+    private ServerSocket listener;
+    private static Client client;
     DefaultTableModel modelBook;
     DefaultTableModel modelBorrower;
     DefaultTableModel modelLoan;
@@ -36,8 +42,9 @@ public class Admin extends javax.swing.JFrame {
     private int x = 10;
     //bookList = bookDAO.getInfoAllBook();
     
-    public Admin() {
+    public Admin(Client client) {
         initComponents();
+        this.client = client;
         bookList = null;
         modelBook = (DefaultTableModel)bookTable.getModel();
         modelBorrower = (DefaultTableModel)borrowerTable.getModel();
@@ -762,10 +769,59 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonShowLoanActionPerformed
 
     private void buttonAllBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAllBookActionPerformed
-
+        
+        try {
+            client.sendMSG("showBook");
+            System.out.println("Gửi showBook đến server");
+        } catch (IOException ex) {
+            System.out.println("Lỗi gửi showBook đến Server");
+                    
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String request = null;
+        int idbook;
+        String title;
+        String subject;
+        String author;
+        int quantitySum;
+        int quantityBorrowed;
+        String status;
+        
+        modelBook.setRowCount(0);
+        while ( true){
+            try {
+                request = client.getMSG();
+                
+                if( request.equals("done")){
+                    break;
+                }
+                if(request.equals("book")){
+                    
+                    idbook = Integer.parseInt(client.getMSG());
+                    title = client.getMSG();
+                    subject = client.getMSG();
+                    author = client.getMSG();
+                    quantitySum = Integer.parseInt(client.getMSG());
+                    quantityBorrowed = Integer.parseInt(client.getMSG());
+                    status = client.getMSG();
+                 
+                    modelBook.addRow(new Object[]{
+                        idbook, title, subject, author, quantitySum, quantityBorrowed, status
+                    });
+                    
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        /*
         bookList = bookDAO.getInfoAllBook();
         showBook(bookList);
         bookList.clear();
+        */
     }//GEN-LAST:event_buttonAllBookActionPerformed
 
     private void buttonDeleteBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteBookActionPerformed
@@ -912,16 +968,23 @@ public class Admin extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin().setVisible(true);
-                //Login login  = new Login();
-                //login.setVisible(true);
-            }
+                
+                try{
+                    
+                Admin admin = new Admin(client);
+                admin.setVisible(true);
+                    
+                }catch( Exception e){
+                    e.printStackTrace();
+                }
+        }
+        
+        
         });
-        
-        
+    }
         
      
-    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
