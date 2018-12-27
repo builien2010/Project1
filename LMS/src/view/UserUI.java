@@ -9,7 +9,11 @@ import control.BookDAO;
 import model.Borrower;
 import control.BorrowerDAO;
 import control.LoanDAO;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import jdk.nashorn.internal.scripts.JO;
@@ -25,6 +29,8 @@ public class UserUI extends javax.swing.JFrame {
     /**
      * Creates new form UserUI
      */
+    private ServerSocket listener;
+    private static Client client;
     DefaultTableModel modelBook;
     static Borrower  borrower1;
     private ArrayList<Book> bookList;
@@ -37,9 +43,10 @@ public class UserUI extends javax.swing.JFrame {
     public UserUI(){
         initComponents();
     }
-    public UserUI(Borrower  borrower) {
+    public UserUI(Client client, Borrower  borrower) {
         
         initComponents();
+        this.client = client;
         borrower1 = borrower;
         System.out.println("name" + borrower.getName());
         txtName.setText(borrower.getName());
@@ -73,6 +80,13 @@ public class UserUI extends javax.swing.JFrame {
         bookTable = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         buttonShowBook = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtIdBook = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtIdBorrower = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        buttonBorrowedBook = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -123,6 +137,16 @@ public class UserUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setText("Phiếu mượn sách");
+
+        jLabel10.setText("Mã sách");
+
+        jLabel11.setText("Mã bạn đọc");
+
+        jLabel12.setText("Ngày mượn");
+
+        buttonBorrowedBook.setText("Mượn sách");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,17 +159,31 @@ public class UserUI extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addComponent(txtSearchBook, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(buttonSearchBook)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(18, Short.MAX_VALUE)
+                        .addComponent(buttonSearchBook))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addGap(39, 39, 39)
+                                    .addComponent(buttonShowBook)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel12))
                                 .addGap(31, 31, 31)
-                                .addComponent(buttonShowBook))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtIdBook)
+                                    .addComponent(txtIdBorrower, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(213, 213, 213)
+                        .addComponent(buttonBorrowedBook)))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,11 +195,25 @@ public class UserUI extends javax.swing.JFrame {
                     .addComponent(buttonSearchBook))
                 .addGap(34, 34, 34)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(buttonShowBook))
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtIdBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtIdBorrower, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(buttonBorrowedBook)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Thư viện", jPanel1);
@@ -209,7 +261,7 @@ public class UserUI extends javax.swing.JFrame {
                             .addComponent(txtPassword))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(292, Short.MAX_VALUE)
+                .addContainerGap(439, Short.MAX_VALUE)
                 .addComponent(buttonUpdate)
                 .addGap(121, 121, 121))
         );
@@ -238,7 +290,7 @@ public class UserUI extends javax.swing.JFrame {
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(buttonUpdate)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Quản lí thông tin cá nhân", jPanel2);
@@ -268,7 +320,7 @@ public class UserUI extends javax.swing.JFrame {
         borrower1.setEmail( txtEmail.getText());
         borrower1.setPassword(txtPassword.getName());
         borrower1.setAddress(txtAddress.getText());
-        borrower1.setPhone(Integer.parseInt(txtPhone.getText()));
+        borrower1.setPhone(txtPhone.getText());
         
         (new BorrowerDAO()).updateBorrower(borrower1);
         
@@ -292,11 +344,54 @@ public class UserUI extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSearchBookActionPerformed
 
     private void buttonShowBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowBookActionPerformed
-
-        bookList = bookDAO.getInfoAllBook();
-
-        showBook(bookList);
-        bookList.clear();
+         try {
+            client.sendMSG("showBook");
+            System.out.println("Gửi showBook đến server");
+        } catch (IOException ex) {
+            System.out.println("Lỗi gửi showBook đến Server");
+                    
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String request = null;
+        int idbook;
+        String title;
+        String subject;
+        String author;
+        int quantitySum;
+        int quantityBorrowed;
+        String status;
+        
+        modelBook.setRowCount(0);
+        while ( true){
+            try {
+                request = client.getMSG();
+                
+                if( request.equals("done")){
+                    break;
+                }
+                if(request.equals("book")){
+                    
+                    idbook = Integer.parseInt(client.getMSG());
+                    title = client.getMSG();
+                    subject = client.getMSG();
+                    author = client.getMSG();
+                    quantitySum = Integer.parseInt(client.getMSG());
+                    quantityBorrowed = Integer.parseInt(client.getMSG());
+                    status = client.getMSG();
+                 
+                    modelBook.addRow(new Object[]{
+                        idbook, title, subject, author
+                    });
+                    
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+       
 
         
     }//GEN-LAST:event_buttonShowBookActionPerformed
@@ -355,17 +450,21 @@ public class UserUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserUI(borrower1).setVisible(true);
+                new UserUI(client, borrower1).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable bookTable;
+    private javax.swing.JButton buttonBorrowedBook;
     private javax.swing.JButton buttonSearchBook;
     private javax.swing.JButton buttonShowBook;
     private javax.swing.JButton buttonUpdate;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -373,6 +472,7 @@ public class UserUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
@@ -380,6 +480,8 @@ public class UserUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIdBook;
+    private javax.swing.JTextField txtIdBorrower;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPhone;

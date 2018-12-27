@@ -40,7 +40,7 @@ public class BorrowerDAO{
                     borrower.setEmail(rs.getString("email"));
                     borrower.setPassword(rs.getString("password"));
                     borrower.setAddress(rs.getString("address"));
-                    borrower.setPhone(rs.getInt("phone"));
+                    borrower.setPhone(rs.getString("phone"));
                     
                     borrowerList.add(borrower);
 				
@@ -90,7 +90,7 @@ public class BorrowerDAO{
                 borrower.setEmail(rs.getString("email"));
                 borrower.setPassword(rs.getString("password"));
                 borrower.setAddress(rs.getString("address"));
-                borrower.setPhone(rs.getInt("phone"));
+                borrower.setPhone(rs.getString("phone"));
                     
                 borrowerList.add(borrower);
 				
@@ -112,13 +112,13 @@ public class BorrowerDAO{
         
     public int insertBorrower(Borrower borrower){
         
-        String sql = "insert into borrower(idborrower,name,email,password,address,phone) values(?,?,?,?,?,?)";
-        String sql2 = "select idborrower from borrower";
-        
+        String sql = "insert into borrower(name,email,password,address,phone) values(?,?,?,?,?)";
+        //String sql2 = "select idborrower from borrower";
+        /*
         try{
             conn = dbc.getConnection();
             System.out.println("Kết nối đến borrower");
-            pstmt = conn.prepareStatement(sql2);
+            //pstmt = conn.prepareStatement(sql2);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 if ( rs.getInt("idborrower") == borrower.getIdPerson()){
@@ -132,17 +132,18 @@ public class BorrowerDAO{
             return 0;
               
         }
+        */
         
         try{
             conn = dbc.getConnection();
             System.out.println("Kết nối đến borrower");
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, borrower.getIdPerson());
-            pstmt.setString(2, borrower.getName());
-            pstmt.setString(3, borrower.getEmail());
-            pstmt.setString(4, borrower.getPassword());
-            pstmt.setString(5, borrower.getAddress());
-            pstmt.setInt(6, borrower.getPhone());
+            //pstmt.setInt(1, 1);
+            pstmt.setString(1, borrower.getName());
+            pstmt.setString(2, borrower.getEmail());
+            pstmt.setString(3, borrower.getPassword());
+            pstmt.setString(4, borrower.getAddress());
+            pstmt.setString(5, borrower.getPhone());
             
             int check =  pstmt.executeUpdate();
             

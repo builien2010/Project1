@@ -58,7 +58,7 @@ public class LoanDAO {
                     borrower.setEmail(rs.getString("borrower.email"));
                     borrower.setPassword(rs.getString("borrower.password"));
                     borrower.setAddress(rs.getString("borrower.address"));
-                    borrower.setPhone(rs.getInt("borrower.phone"));
+                    borrower.setPhone(rs.getString("borrower.phone"));
                     
                     loan.setBorrower(borrower);
                     book.setIdbook (rs.getInt("idbook"));
@@ -75,7 +75,7 @@ public class LoanDAO {
                     issuer.setEmail(rs.getString("staff.email"));
                     issuer.setPassword(rs.getString("staff.password"));
                     issuer.setAddress(rs.getString("staff.address"));
-                    issuer.setPhone(rs.getInt("staff.phone"));
+                    issuer.setPhone(rs.getString("staff.phone"));
                     issuer.setSalary(rs.getDouble("staff.salary"));
                     loan.setIssuer(issuer);
                     
@@ -84,7 +84,6 @@ public class LoanDAO {
                     receiver.setEmail(rs.getString("staff2.email"));
                     receiver.setPassword(rs.getString("staff2.password"));
                     receiver.setAddress(rs.getString("staff2.address"));
-                    receiver.setPhone(rs.getInt("staff2.phone"));
                     receiver.setSalary(rs.getDouble("staff2.salary"));
                     loan.setReceiver(receiver);
                     

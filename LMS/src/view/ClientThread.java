@@ -100,7 +100,7 @@ public class ClientThread extends Thread{
                             }
                             else{
                                 respone = "fail";
-                                 System.out.println("respone: " + respone);
+                                System.out.println("respone: " + respone);
                             }
                             
                         }
@@ -126,6 +126,32 @@ public class ClientThread extends Thread{
                     
                     
                 }
+                
+                if ( request.equals("signup")){
+                    try{
+                        String name = is.readUTF();
+                        String email = is.readUTF();
+                        String password = is.readUTF();
+                        String address = is.readUTF();
+                        String phone = is.readUTF();
+                        
+                        Borrower borrower = new Borrower(name, email, password, address, phone);
+                        int check = (new BorrowerDAO()).insertBorrower(borrower);
+                        
+                        if( check == 1){
+                            sendMSG("signupsuccess");
+                        }else{
+                            sendMSG("signupfail");
+                        }
+                            
+                        
+                        
+                        
+                        
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
 			
 			
             }
@@ -147,9 +173,16 @@ public class ClientThread extends Thread{
                         for(Book book: bookList){
                             try {
                                 sendMSG("book");
+                                sendBook(book);
                             } catch (IOException ex) {
                                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                        }
+                        
+                        try{
+                            sendMSG("done");
+                        }catch(Exception e){
+                            e.printStackTrace();
                         }
                     }
                 }

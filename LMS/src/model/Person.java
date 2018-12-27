@@ -9,12 +9,12 @@ public class Person {
 	protected String password;
         protected String email;
 	protected String address;
-	protected int phone;
+	protected String phone;
 	
 	static int currentIdNumber = 0;
 
-	public Person(int personId, String name, String email, String password, String address, int phone) {
-		this.idPerson = personId;
+	public Person(String name, String email, String password, String address, String phone) {
+		
 		this.name = name;
                 this.email = email;
                 this.password = password;
@@ -68,11 +68,11 @@ public class Person {
 		this.address = address;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 

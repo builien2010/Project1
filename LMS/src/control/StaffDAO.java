@@ -41,7 +41,7 @@ public class StaffDAO{
                     staff.setEmail(rs.getString("email"));
                     staff.setPassword(rs.getString("password"));
                     staff.setAddress(rs.getString("address"));
-                    staff.setPhone(rs.getInt("phone"));
+                    staff.setPhone(rs.getString("phone"));
                     staff.setSalary(rs.getDouble("salary"));
                     
                     staffList.add(staff);
@@ -97,7 +97,7 @@ public class StaffDAO{
                 staff.setEmail(rs.getString("email"));
                 staff.setPassword(rs.getString("password"));
                 staff.setAddress(rs.getString("address"));
-                staff.setPhone(rs.getInt("phone"));
+                staff.setPhone(rs.getString("phone"));
                 staff.setSalary(rs.getDouble("salary"));
                 
                 staffList.add(staff);
@@ -150,7 +150,7 @@ public class StaffDAO{
             pstmt.setString(3, staff.getEmail());
             pstmt.setString(4, staff.getPassword());
             pstmt.setString(5, staff.getAddress());
-            pstmt.setInt(6, staff.getPhone());
+            pstmt.setString(6, staff.getPhone());
             pstmt.setDouble(7, staff.getSalary());
             
             int check =  pstmt.executeUpdate();

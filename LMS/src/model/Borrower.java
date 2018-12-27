@@ -10,8 +10,8 @@ public class Borrower extends Person{
 	private ArrayList<Loan> borrowedBooks;		// danh sách các phiếu mượn sách ( mỗi phiếu gắn với 1 cuốn sách )
 	private ArrayList<HoldRequest> onHoldBooks;	// danh sách các yêu cầu mượn sách
 	
-	public Borrower(int personId, String name, String email, String password, String address, int phone) {
-		super(personId, name, email, password, address, phone);
+	public Borrower( String name, String email, String password, String address, String phone) {
+		super(name, email, password, address, phone);
 		borrowedBooks = new ArrayList<>();
 		onHoldBooks = new ArrayList<>();
 	}

@@ -726,7 +726,7 @@ public class Admin extends javax.swing.JFrame {
         borrower.setEmail(txtEmailBorrower.getText());
         borrower.setPassword(txtPasswordBorrower.getText());
         borrower.setAddress(txtAddressBorrower.getText());
-        borrower.setPhone(Integer.parseInt(txtPhoneBorrower.getText()));
+        borrower.setPhone(txtPhoneBorrower.getText());
 
         int k = borrowerDAO.insertBorrower(borrower);
         if( k == 1){

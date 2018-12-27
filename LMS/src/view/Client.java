@@ -56,15 +56,16 @@ public class Client extends javax.swing.JFrame {
 		os.flush();
 	}
 	
-	public void sendAccount(String username, String password, String phone, String address) throws IOException{
-		os.writeUTF(username);
+	public void sendAccount(String name, String email, String password, String address, String phone) throws IOException{
+		os.writeUTF(name);
+		os.flush();
+		os.writeUTF(email);
 		os.flush();
 		os.writeUTF(password);
 		os.flush();
-		os.writeUTF(phone);
-		os.flush();
 		os.writeUTF(address);
 		os.flush();
+                os.writeUTF(phone);
 	}
 	
 	public String getMSG() throws IOException{
@@ -97,6 +98,7 @@ public class Client extends javax.swing.JFrame {
         buttonBorrower = new javax.swing.JButton();
         txtEmail = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
+        buttonSignup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,10 +106,17 @@ public class Client extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
-        buttonBorrower.setText("Login");
+        buttonBorrower.setText("Đăng nhập");
         buttonBorrower.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonBorrowerActionPerformed(evt);
+            }
+        });
+
+        buttonSignup.setText("Đăng kí");
+        buttonSignup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSignupActionPerformed(evt);
             }
         });
 
@@ -116,20 +125,21 @@ public class Client extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                            .addComponent(txtPassword)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addComponent(buttonBorrower)))
+                .addGap(64, 64, 64)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                    .addComponent(txtPassword))
                 .addGap(149, 149, 149))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(123, 123, 123)
+                .addComponent(buttonBorrower)
+                .addGap(54, 54, 54)
+                .addComponent(buttonSignup)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,7 +153,9 @@ public class Client extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addComponent(buttonBorrower)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonBorrower)
+                    .addComponent(buttonSignup))
                 .addContainerGap(99, Short.MAX_VALUE))
         );
 
@@ -180,7 +192,7 @@ public class Client extends javax.swing.JFrame {
                         borrower = (new BorrowerDAO()).check(email, password);
 			JOptionPane.showMessageDialog(null, "Bạn đọc đăng nhập thành công");
 			this.setVisible(false);
-			new UserUI(borrower).setVisible(true);
+			new UserUI(this, borrower).setVisible(true);
 		}
              
 		if(check.equals("fail")){
@@ -204,6 +216,15 @@ public class Client extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_buttonBorrowerActionPerformed
+
+    private void buttonSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSignupActionPerformed
+        // TODO add your handling code here:
+        SignUp signUp = new SignUp(this);
+        signUp.setVisible(true);
+        
+        
+        
+    }//GEN-LAST:event_buttonSignupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,6 +269,7 @@ public class Client extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBorrower;
+    private javax.swing.JButton buttonSignup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtEmail;
