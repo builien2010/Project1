@@ -42,3 +42,17 @@ CREATE TABLE `lms`.`loan` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
+
+CREATE TABLE `lms`.`holdrequest` (
+  `idholdrequest` INT NOT NULL AUTO_INCREMENT,
+  `idborrower` INT NOT NULL,
+  `idbook` INT NOT NULL,
+  `requestdate` DATE NULL,  
+  PRIMARY KEY (`idholdrequest`),
+  FOREIGN KEY (`idborrower`) REFERENCES `lms`.`borrower`(`idborrower`),
+  FOREIGN KEY (`idbook`) REFERENCES `lms`.`book`(`idbook`)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+

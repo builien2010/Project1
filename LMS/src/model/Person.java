@@ -21,6 +21,16 @@ public class Person {
 		this.address = address;
 		this.phone = phone;
 	}
+        
+        public Person(int idperson,String name, String email, String password, String address, String phone) {
+		this.idPerson = idperson;
+		this.name = name;
+                this.email = email;
+                this.password = password;
+		this.address = address;
+		this.phone = phone;
+	}
+
 
 	public Person() {
 		super();

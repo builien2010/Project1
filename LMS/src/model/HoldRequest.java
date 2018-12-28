@@ -2,18 +2,27 @@
 
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 public class HoldRequest {
 	
 	Borrower borrower;
 	Book book;
-	Date requestDate;
+	   Date requestDate;
 	
+        public HoldRequest(){
+        }
 	public HoldRequest(Borrower borrower, Book book, Date requestDate) {
 		this.borrower = borrower;
 		this.book = book;
 		this.requestDate = requestDate;
+	}
+        
+        public HoldRequest(Borrower borrower, Book book){
+                this.borrower = borrower;
+		this.book = book;
+		
 	}
 
 	public Borrower getBorrower() {
@@ -45,5 +54,7 @@ public class HoldRequest {
 	public void print() {
 		System.out.println(book.getTitle() + "\t\t\t\t" + borrower.getName() + "\t\t\t\t" + requestDate + "\n");
 	}
+
+    
 
 }

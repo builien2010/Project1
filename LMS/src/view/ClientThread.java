@@ -3,10 +3,12 @@ package view;
 import control.BorrowerDAO;
 import control.StaffDAO;
 import control.BookDAO;
+import control.HoldRequestDAO;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +16,7 @@ import java.util.logging.Logger;
 import model.Borrower;
 import model.Staff;
 import model.Book;
+import model.HoldRequest;
 
 public class ClientThread extends Thread{
 	private Socket socketOfServer;
@@ -45,13 +48,16 @@ public class ClientThread extends Thread{
             sendMSG(book.getStatus());
             
 	}
-	/*
-	public void sendUser(User user) throws IOException{
-		sendMSG(user.getName());
-		sendMSG(user.getPhone());
-		sendMSG(user.getAddress());
+	
+	public void sendBorrower(Borrower borrower) throws IOException{
+		sendMSG(String.valueOf(borrower.getIdPerson()));
+		sendMSG(borrower.getName());
+                sendMSG(borrower.getEmail());
+                sendMSG(borrower.getPassword());
+                sendMSG(borrower.getAddress());
+                sendMSG(borrower.getPhone());
 	}
-*/
+
 	 
 	public void run(){
             
@@ -138,8 +144,11 @@ public class ClientThread extends Thread{
                         Borrower borrower = new Borrower(name, email, password, address, phone);
                         int check = (new BorrowerDAO()).insertBorrower(borrower);
                         
+                        
                         if( check == 1){
                             sendMSG("signupsuccess");
+                            borrower = (new BorrowerDAO()).check(email, password);
+                            sendBorrower(borrower);
                         }else{
                             sendMSG("signupfail");
                         }
@@ -183,6 +192,38 @@ public class ClientThread extends Thread{
                             sendMSG("done");
                         }catch(Exception e){
                             e.printStackTrace();
+                        }
+                    }
+                    
+                    if( request.equals("holdRequest")){
+                        try {
+                            int idborrower = Integer.parseInt(is.readUTF());
+                            System.out.println("idborrower" + idborrower);
+                            
+                            int idbook= Integer.parseInt(is.readUTF());
+                            System.out.println("idbook" + idbook);
+                            String date = is.readUTF();
+                            Date requestDate = Date.valueOf(date);
+                            
+                            
+                            Borrower borrower = new Borrower();
+                            Book book = new Book();
+                            HoldRequest holdRequest = new HoldRequest(borrower, book);
+                            
+                            holdRequest.getBorrower().setIdPerson(idborrower);
+                            holdRequest.getBook().setIdbook(idbook);
+                            holdRequest.setRequestDate(requestDate);
+                            
+                            int check = (new HoldRequestDAO()).insertHoldRequest(holdRequest);
+                            
+                            if ( check == 1){
+                                sendMSG("holdsuccess");
+                            }
+                            else{
+                                sendMSG("holdfail");
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }

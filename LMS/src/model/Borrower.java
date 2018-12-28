@@ -19,6 +19,15 @@ public class Borrower extends Person{
     public Borrower() {
         super();
     }
+    
+    public Borrower( int id,String name, String email, String password, String address, String phone) {
+		super(id,name, email, password, address, phone);
+		borrowedBooks = new ArrayList<>();
+		onHoldBooks = new ArrayList<>();
+	}
+
+    
+    
 
 	public ArrayList<Loan> getBorrowedBooks() {
 		return borrowedBooks;

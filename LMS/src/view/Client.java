@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -30,55 +31,66 @@ public class Client extends javax.swing.JFrame {
      */
     
     private Socket socketOfClient;
-	static final String ip = "localhost";	
-	private DataInputStream is;
-	private DataOutputStream os;
-	public String emailClient;
+    static final String ip = "localhost";	
+    private DataInputStream is;
+    private DataOutputStream os;
+    public String emailClient;
 	
 	/**
 	 * Launch the application.
 	 */
-	public void startClient() throws UnknownHostException, IOException{
-            System.out.println("Client  chạy");
-		socketOfClient = new Socket(ip, 1998);
-		is = new DataInputStream(socketOfClient.getInputStream());
-		os = new DataOutputStream(socketOfClient.getOutputStream());
-	}
+    public void startClient() throws UnknownHostException, IOException{
+        
+        System.out.println("Client  chạy");
+	socketOfClient = new Socket(ip, 1998);
+	is = new DataInputStream(socketOfClient.getInputStream());
+	os = new DataOutputStream(socketOfClient.getOutputStream());
+    }
 	
-	public void close() throws IOException{
-		is.close();
-		os.close();
-		socketOfClient.close();
-	}
+    public void close() throws IOException{
+	is.close();
+	os.close();
+	socketOfClient.close();
+    }
 	
-	public void sendMSG(String data) throws IOException{
-		os.writeUTF(data);
-		os.flush();
-	}
+    public void sendMSG(String data) throws IOException{
+	os.writeUTF(data);
+	os.flush();
+    }
 	
-	public void sendAccount(String name, String email, String password, String address, String phone) throws IOException{
-		os.writeUTF(name);
-		os.flush();
-		os.writeUTF(email);
-		os.flush();
-		os.writeUTF(password);
-		os.flush();
-		os.writeUTF(address);
-		os.flush();
-                os.writeUTF(phone);
-	}
+    public void sendAccount(String name, String email, String password, String address, String phone) throws IOException{
+	os.writeUTF(name);
+	os.flush();
+        os.writeUTF(email);
+	os.flush();
+        os.writeUTF(password);
+	os.flush();
+	os.writeUTF(address);
+        os.flush();
+        os.writeUTF(phone);
+    }
 	
-	public String getMSG() throws IOException{
-		String data = is.readUTF();
-		return data;
-	}
+    public String getMSG() throws IOException{
+	String data = is.readUTF();
+	return data;
+    }
 	
-	public void sendRequestLogin(String email, String password) throws IOException{
-		os.writeUTF(email);
-		os.flush();
-		os.writeUTF(password);
-		os.flush();
-	}
+    public void sendRequestLogin(String email, String password) throws IOException{
+	os.writeUTF(email);
+	os.flush();
+	os.writeUTF(password);
+	os.flush();
+    } 
+    
+    public void sendHoldRequest(String idborrower, String idbook, String date) throws IOException{
+        os.writeUTF(idborrower);
+        os.flush();
+        os.writeUTF(idbook);
+        os.flush();
+        os.writeUTF(date);
+        os.flush();   
+        
+    }
 	
     public Client() {
         initComponents();
@@ -192,7 +204,7 @@ public class Client extends javax.swing.JFrame {
                         borrower = (new BorrowerDAO()).check(email, password);
 			JOptionPane.showMessageDialog(null, "Bạn đọc đăng nhập thành công");
 			this.setVisible(false);
-			new UserUI(this, borrower).setVisible(true);
+			new User(this, borrower).setVisible(true);
 		}
              
 		if(check.equals("fail")){

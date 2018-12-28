@@ -5,6 +5,7 @@
  */
 package view;
 
+import control.BorrowerDAO;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import model.Borrower;
@@ -155,9 +156,19 @@ public class SignUp extends javax.swing.JFrame {
             if ( respone.equals("signupsuccess")){
                 JOptionPane.showConfirmDialog(null, "Đăng kí thành công");
                 this.setVisible(false);
-                Borrower borrower = new Borrower();
                 
-                (new UserUI(client, borrower)).setVisible(true);
+                int id = Integer.parseInt(client.getMSG());
+                name = client.getMSG();
+                email = client.getMSG();
+                password = client.getMSG();
+                address = client.getMSG();
+                phone = client.getMSG();
+               
+                Borrower borrower = new Borrower(id, name, email, password, address, phone );
+               	
+                (new User(client, borrower)).setVisible(true);
+                
+                client.sendMSG("borrower");
             }
             
             if(respone.equals("signupfail")){
