@@ -245,7 +245,7 @@ public class BorrowerDAO{
     }
     
     
-    public void updateBorrower( Borrower borrower){
+    public int  updateBorrower( Borrower borrower){
         String sql = "update borrower set "
                 + "name = " + "'" + borrower.getName() + "',"
                 + "email = " + "'" + borrower.getEmail() + "',"
@@ -254,12 +254,16 @@ public class BorrowerDAO{
                 + "phone = " + "'" + borrower.getPhone() + "'"
                 + " where idborrower = " + borrower.getIdPerson();
         System.out.println(sql);
+        int check = 0;
         
         try {
             conn = dbc.getConnection();
             System.out.println("Kết nối đến borrower");
             System.out.println("lấy thông tin");
             pstmt = conn.prepareStatement(sql);
+            pstmt.execute();
+            //if ( rs == true)
+            check = 1;
             pstmt.close();
             
         }catch(Exception e){
@@ -267,7 +271,9 @@ public class BorrowerDAO{
             e.printStackTrace();
         }finally{
             dbc.closeConnection(conn);
-        } 
+        }
+        
+        return check;
 
         
     }

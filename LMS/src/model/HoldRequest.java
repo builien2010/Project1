@@ -7,38 +7,38 @@ import java.sql.Date;
 
 public class HoldRequest {
 	
-	Borrower borrower;
-	Book book;
-	   Date requestDate;
+	int idborrower;
+	int idbook;
+	Date requestDate;
 	
         public HoldRequest(){
         }
-	public HoldRequest(Borrower borrower, Book book, Date requestDate) {
-		this.borrower = borrower;
-		this.book = book;
+	public HoldRequest(int borrower, int book, Date requestDate) {
+		this.idborrower = borrower;
+		this.idbook = book;
 		this.requestDate = requestDate;
 	}
         
-        public HoldRequest(Borrower borrower, Book book){
-                this.borrower = borrower;
-		this.book = book;
+        public HoldRequest(int borrower, int book){
+                this.idborrower = borrower;
+		this.idbook = book;
 		
 	}
 
-	public Borrower getBorrower() {
-		return borrower;
+	public int getIdborrower() {
+		return idborrower;
 	}
 
-	public void setBorrower(Borrower borrower) {
-		this.borrower = borrower;
+	public void setIdborrower(int idborrower) {
+		this.idborrower = idborrower;
 	}
 
-	public Book getBook() {
-		return book;
+	public int getBook() {
+		return idbook;
 	}
 
-	public void setBook(Book book) {
-		this.book = book;
+	public void setBook(int book) {
+		this.idbook = book;
 	}
 
 	public Date getRequestDate() {
@@ -51,10 +51,6 @@ public class HoldRequest {
 	
 	//Print Hold Request Information
 	
-	public void print() {
-		System.out.println(book.getTitle() + "\t\t\t\t" + borrower.getName() + "\t\t\t\t" + requestDate + "\n");
-	}
-
     
 
 }

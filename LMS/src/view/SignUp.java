@@ -166,7 +166,7 @@ public class SignUp extends javax.swing.JFrame {
                
                 Borrower borrower = new Borrower(id, name, email, password, address, phone );
                	
-                (new User(client, borrower)).setVisible(true);
+                //(new User(client, borrower)).setVisible(true);
                 
                 client.sendMSG("borrower");
             }

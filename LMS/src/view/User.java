@@ -11,6 +11,7 @@ import control.BorrowerDAO;
 import control.LoanDAO;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,7 @@ public class User extends javax.swing.JFrame {
     private ServerSocket listener;
     private static Client client;
     DefaultTableModel modelBook;
+    DefaultTableModel modelHoldRequest;
     static Borrower  borrower1;
     private ArrayList<Book> bookList;
     private ArrayList<Borrower> borrowerList;
@@ -57,6 +59,7 @@ public class User extends javax.swing.JFrame {
         
         bookList = null;
         modelBook = (DefaultTableModel)bookTable.getModel();
+        modelHoldRequest = (DefaultTableModel)holdRequestTable.getModel();
        
     }
 
@@ -90,7 +93,9 @@ public class User extends javax.swing.JFrame {
         txtissuedDate = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        holdRequestTable = new javax.swing.JTable();
+        jLabel14 = new javax.swing.JLabel();
+        buttonShowHoldRequest = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -230,18 +235,27 @@ public class User extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Thư viện", jPanel1);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        holdRequestTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã bạn đọc", "Mã sách", "Ngày yêu cầu"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(holdRequestTable);
+
+        jLabel14.setText("Hiển thị tất cả các yêu cầu mượn sách");
+
+        buttonShowHoldRequest.setText("Hiển thị");
+        buttonShowHoldRequest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowHoldRequestActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -249,13 +263,22 @@ public class User extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(61, 61, 61)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(26, 26, 26)
+                        .addComponent(buttonShowHoldRequest))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(109, 109, 109)
+                .addGap(40, 40, 40)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(buttonShowHoldRequest))
+                .addGap(46, 46, 46)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(205, Short.MAX_VALUE))
         );
@@ -374,18 +397,47 @@ public class User extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUpdateActionPerformed
-
-        borrower1.setName( txtName.getText());
-        borrower1.setEmail( txtEmail.getText());
-        borrower1.setPassword(txtPassword.getName());
-        borrower1.setAddress(txtAddress.getText());
-        borrower1.setPhone(txtPhone.getText());
-        
-        (new BorrowerDAO()).updateBorrower(borrower1);
-        
-        JOptionPane.showConfirmDialog(null, "Cập nhật thành công", "Quản lí thông tin cá nhân", JOptionPane.DEFAULT_OPTION);
-        
-        
+        try {                                                   
+            
+            // TODO add your handling code here:
+            // Gửi yêu cầu mượn sách
+            String request = null;
+            try {
+                client.sendMSG("updateaccount");
+                System.out.println("Gửi updateaccount đến server");
+                
+                String name = txtName.getText();
+                String email = txtEmail.getText();
+                String password = txtPassword.getText();
+                String address = txtAddress.getText();
+                String phone = txtPhone.getText();
+                 
+                client.sendUpdateAccount(borrower1.getIdPerson(),name, email, password, address, phone);
+                
+                
+            } catch (IOException ex) {
+                System.out.println("Lỗi gửi holdRequest đến Server");
+                
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+            request = client.getMSG();
+            
+            if(request.equals("updatefail")){
+                JOptionPane.showMessageDialog(null, "Yêu cầu thất bại");
+            }
+            
+            if( request.equals("updatesuccess")){
+                JOptionPane.showMessageDialog(null, "Yêu cầu thành công");
+            }
+                
+            
+        } catch (IOException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
         
     }//GEN-LAST:event_buttonUpdateActionPerformed
 
@@ -508,6 +560,59 @@ public class User extends javax.swing.JFrame {
     
         
     }//GEN-LAST:event_buttonBorrowedBookActionPerformed
+
+    private void buttonShowHoldRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHoldRequestActionPerformed
+        // TODO add your handling code here:
+        // Hiển thị tất cả các yêu cầu mượn sách của bạn đọc
+        
+        try {
+            client.sendMSG("showrequest");
+            System.out.println("Gửi show hold request đến server");
+            client.sendMSG(String.valueOf(borrower1.getIdPerson()));
+        } catch (IOException ex) {
+            System.out.println("Lỗi gửi showBook đến Server");
+                    
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String request = null;
+        int idborrower;
+        int idbook;
+        Date requestDate;
+                
+        modelHoldRequest.setRowCount(0);
+        while ( true){
+            try {
+                request = client.getMSG();
+                
+                if( request.equals("done")){
+                    break;
+                }
+                if(request.equals("holdrequest")){
+                    idborrower = Integer.parseInt(client.getMSG());
+                    idbook = Integer.parseInt(client.getMSG());
+                    requestDate = Date.valueOf(client.getMSG());
+                  
+                    modelHoldRequest.addRow(new Object[]{
+                        idborrower, idbook, requestDate
+                    });
+                    
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+       
+
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_buttonShowHoldRequestActionPerformed
     
     public void showBook(ArrayList<Book> bookList){
         //model.setRowCount(0);
@@ -574,12 +679,15 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JButton buttonBorrowedBook;
     private javax.swing.JButton buttonSearchBook;
     private javax.swing.JButton buttonShowBook;
+    private javax.swing.JButton buttonShowHoldRequest;
     private javax.swing.JButton buttonUpdate;
+    private javax.swing.JTable holdRequestTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -595,7 +703,6 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;

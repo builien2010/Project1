@@ -69,6 +69,20 @@ public class Client extends javax.swing.JFrame {
         os.flush();
         os.writeUTF(phone);
     }
+    
+     public void sendUpdateAccount(int idborrower, String name, String email, String password, String address, String phone) throws IOException{
+	os.writeUTF(String.valueOf(idborrower));
+        os.flush();
+        os.writeUTF(name);
+	os.flush();
+        os.writeUTF(email);
+	os.flush();
+        os.writeUTF(password);
+	os.flush();
+	os.writeUTF(address);
+        os.flush();
+        os.writeUTF(phone);
+    }
 	
     public String getMSG() throws IOException{
 	String data = is.readUTF();

@@ -57,6 +57,16 @@ public class ClientThread extends Thread{
                 sendMSG(borrower.getAddress());
                 sendMSG(borrower.getPhone());
 	}
+        
+        public void sendHoldRequest(HoldRequest holdRequest){
+            try {
+                sendMSG(String.valueOf(holdRequest.getIdborrower()));
+                sendMSG(String.valueOf(holdRequest.getBook()));
+                sendMSG(String.valueOf(holdRequest.getRequestDate()));
+                } catch (IOException ex) {
+                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
 	 
 	public void run(){
@@ -175,6 +185,7 @@ public class ClientThread extends Thread{
                     }
                     
                     ArrayList<Book> bookList = new ArrayList<>();
+                    ArrayList<HoldRequest> holdRequests = new ArrayList<>();
                     
                     if( request.equals("showBook")){
                         bookList = (new BookDAO()).getInfoAllBook();
@@ -196,8 +207,9 @@ public class ClientThread extends Thread{
                     }
                     
                     if( request.equals("holdRequest")){
+                        int idborrower;
                         try {
-                            int idborrower = Integer.parseInt(is.readUTF());
+                            idborrower = Integer.parseInt(is.readUTF());
                             System.out.println("idborrower" + idborrower);
                             
                             int idbook= Integer.parseInt(is.readUTF());
@@ -206,12 +218,11 @@ public class ClientThread extends Thread{
                             Date requestDate = Date.valueOf(date);
                             
                             
-                            Borrower borrower = new Borrower();
-                            Book book = new Book();
-                            HoldRequest holdRequest = new HoldRequest(borrower, book);
+                           
+                            HoldRequest holdRequest = new HoldRequest();
                             
-                            holdRequest.getBorrower().setIdPerson(idborrower);
-                            holdRequest.getBook().setIdbook(idbook);
+                            holdRequest.setIdborrower(idborrower);
+                            holdRequest.setBook(idbook);
                             holdRequest.setRequestDate(requestDate);
                             
                             int check = (new HoldRequestDAO()).insertHoldRequest(holdRequest);
@@ -226,6 +237,91 @@ public class ClientThread extends Thread{
                             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    
+                    if( request.equals("showrequest")){
+                        int idborrower = 0;
+                        try {
+                            idborrower = Integer.parseInt(is.readUTF());
+                        } catch (IOException ex) {
+                            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        System.out.println("idborrower" + idborrower);
+                        holdRequests = (new HoldRequestDAO()).getInfoAllRequest(idborrower);
+                        
+                        for(HoldRequest holdRequest: holdRequests){
+                            try {
+                                sendMSG("holdrequest");
+                                sendHoldRequest(holdRequest);
+                            } catch (IOException ex) {
+                                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                        try{
+                            sendMSG("done");
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    
+                    if( request.equals("holdRequest")){
+                        int idborrower;
+                        try {
+                            idborrower = Integer.parseInt(is.readUTF());
+                            System.out.println("idborrower" + idborrower);
+                            
+                            int idbook= Integer.parseInt(is.readUTF());
+                            System.out.println("idbook" + idbook);
+                            String date = is.readUTF();
+                            Date requestDate = Date.valueOf(date);
+                            
+                            
+                           
+                            HoldRequest holdRequest = new HoldRequest();
+                            
+                            holdRequest.setIdborrower(idborrower);
+                            holdRequest.setBook(idbook);
+                            holdRequest.setRequestDate(requestDate);
+                            
+                            int check = (new HoldRequestDAO()).insertHoldRequest(holdRequest);
+                            
+                            if ( check == 1){
+                                sendMSG("holdsuccess");
+                            }
+                            else{
+                                sendMSG("holdfail");
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    
+                    if( request.equals("updateaccount")){
+                        try{
+                        int idborrower = Integer.parseInt(is.readUTF());
+                        String name = is.readUTF();
+                        String email = is.readUTF();
+                        String password = is.readUTF();
+                        String address = is.readUTF();
+                        String phone = is.readUTF();
+                        
+                        Borrower borrower = new Borrower(idborrower,name, email, password, address, phone);
+                        int check = (new BorrowerDAO()).updateBorrower(borrower);
+                        
+                        
+                        if( check == 1){
+                            sendMSG("updatesuccess");
+                            //borrower = (new BorrowerDAO()).check(email, password);
+                            //sendBorrower(borrower);
+                        }else{
+                            sendMSG("updatefail");
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                
                 }
             }
             
@@ -267,3 +363,4 @@ public class ClientThread extends Thread{
 		
         }
 }
+        

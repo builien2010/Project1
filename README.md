@@ -1,4 +1,4 @@
-# Project1
+﻿# Project1
 
 Quản lí thư viện (LMS)
 
@@ -29,9 +29,11 @@ Quản lí thư viện (LMS)
 + Có tất cả bao nhiêu nhân viên trong thư viện
 
 2. User
-- Quản lí thông tin cá nhân
+- Quản lí thông tin cá nhân : sửa đổi thông tin
 - Tìm kiếm sách
 - Hiển thị tất cả các sách
+- Yêu cầu mượn sách
+- Hiển thị tất cả các yêu cầu mượn sách
 
 3. Đăng nhập
 - Admin

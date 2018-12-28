@@ -28,9 +28,9 @@ public class HoldRequestDAO {
     
 
     // lấy thông tin tất cả các sách
-    public ArrayList<HoldRequest> getInfoAllBook() {
+    public ArrayList<HoldRequest> getInfoAllRequest(int id) {
         
-	String sql = "select * from holdrequest where idborrow = ?";
+	String sql = "select * from holdrequest where idborrower = " + id + "";
 	try {
                 conn = dbc.getConnection();
                  System.out.println("Kết nối đến holdRequest");
@@ -40,8 +40,8 @@ public class HoldRequestDAO {
 		while(rs.next()) {
                     
                     HoldRequest holdRequest = new HoldRequest();
-                    holdRequest.getBook().setIdbook(rs.getInt("idbook"));
-                    holdRequest.getBorrower().setIdPerson(rs.getInt("idborrower"));
+                    holdRequest.setIdborrower(rs.getInt("idborrower"));
+                    holdRequest.setBook(rs.getInt("idbook"));
                     holdRequest.setRequestDate(rs.getDate("requestdate"));
                     
                     
@@ -52,7 +52,8 @@ public class HoldRequestDAO {
                         
                 pstmt.close();		
 	} catch (SQLException e) {		
-            System.out.println("Error: BookDAO1" );
+            System.out.println("Error: Kết nối bookDao lỗi" );
+            e.printStackTrace();
 	}finally{
             dbc.closeConnection(conn);
         }	
@@ -69,8 +70,8 @@ public class HoldRequestDAO {
              System.out.println("Kết nối đến holdrequest");
             pstmt = conn.prepareStatement(sql);
            
-            pstmt.setInt( 1, holdRequest.getBorrower().getIdPerson());
-            pstmt.setInt( 2, holdRequest.getBook().getIdbook());
+            pstmt.setInt( 1, holdRequest.getIdborrower());
+            pstmt.setInt( 2, holdRequest.getBook());
             pstmt.setDate(3,holdRequest.getRequestDate());
             
             check =  pstmt.executeUpdate();
